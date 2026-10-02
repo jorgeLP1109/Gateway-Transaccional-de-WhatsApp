@@ -1,0 +1,7 @@
+node_modules/
+.env
+.env.*
+!.env.example
+auth_info_baileys/
+sessions/
+npm-debug.log*
