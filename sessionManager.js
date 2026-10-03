@@ -1,4 +1,4 @@
-import { rm } from 'node:fs/promises';
+import { chmod, mkdir, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import QRCode from 'qrcode';
 import makeWASocket, {
@@ -32,14 +32,14 @@ async function getBaileysVersion() {
   }
 }
 
-function scheduleReconnect(clientId, session) {
+function scheduleReconnect(clientId, session, delayMs = reconnectDelayMs) {
   if (sessions.get(clientId) !== session || session.reconnectTimer) return;
 
-  console.log(`[${clientId}] Reintentando conexión de WhatsApp en ${reconnectDelayMs / 1000} segundos...`);
+  console.log(`[${clientId}] Reintentando conexión de WhatsApp en ${delayMs / 1000} segundos...`);
   session.reconnectTimer = setTimeout(() => {
     session.reconnectTimer = undefined;
     session.startPromise = connectSession(clientId, session);
-  }, reconnectDelayMs);
+  }, delayMs);
 }
 
 async function connectSession(clientId, session) {
@@ -52,6 +52,10 @@ async function connectSession(clientId, session) {
     console.log(`[${clientId}] Versión de Baileys detectada: ${version.join('.')}`);
 
     const authDirectory = resolve(sessionsDirectory, clientId);
+    await mkdir(authDirectory, { recursive: true, mode: 0o700 });
+    if (process.platform !== 'win32') {
+      await chmod(authDirectory, 0o700);
+    }
     const { state, saveCreds } = await useMultiFileAuthState(authDirectory);
     if (sessions.get(clientId) !== session) return;
 
@@ -60,7 +64,14 @@ async function connectSession(clientId, session) {
       version,
       browser: Browsers.ubuntu('Chrome'),
       syncFullHistory: false,
+      connectTimeoutMs: 60_000,
+      keepAliveIntervalMs: 25_000,
+      defaultQueryTimeoutMs: 0,
     });
+    if (sessions.get(clientId) !== session) {
+      await socket.end(new Error('Session was stopped during startup'));
+      return;
+    }
     session.socket = socket;
 
     socket.ev.on('creds.update', saveCreds);
@@ -108,7 +119,7 @@ async function connectSession(clientId, session) {
         if (wasLoggedOut) {
           console.error(`[${clientId}] La sesión cerró sesión. Elimina las credenciales y vuelve a crearla.`);
         } else {
-          scheduleReconnect(clientId, session);
+          scheduleReconnect(clientId, session, statusCode === 515 ? 0 : reconnectDelayMs);
         }
       }
     });
@@ -188,4 +199,20 @@ export async function deleteSession(clientId) {
 
   await rm(resolve(sessionsDirectory, clientId), { recursive: true, force: true });
   console.log(`[${clientId}] Sesión y credenciales eliminadas.`);
+}
+
+export async function stopSessions() {
+  const activeSessions = [...sessions.values()];
+  sessions.clear();
+
+  await Promise.all(
+    activeSessions.map(async (session) => {
+      clearTimeout(session.reconnectTimer);
+      try {
+        await session.socket?.end(new Error('Gateway shutting down'));
+      } catch (error) {
+        console.error('Error cerrando una sesión de WhatsApp:', error);
+      }
+    }),
+  );
 }
