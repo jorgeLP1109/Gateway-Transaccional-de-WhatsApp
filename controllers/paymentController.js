@@ -363,7 +363,7 @@ export async function reviewManualPayment(req, res, next) {
     const rejected = await PaymentLog.findOneAndUpdate(
       { _id: payment._id, status: 'pending' },
       { $set: { status: 'rejected' } },
-      { new: true },
+      { returnDocument: 'after' },
     );
     if (!rejected) return res.status(409).json({ error: 'El pago ya fue procesado.' });
     await NotificationJob.deleteOne({ paymentId: payment._id });
@@ -383,7 +383,7 @@ export async function retryNotification(req, res, next) {
       {
         $set: { status: 'pending', attempts: 0, nextAttemptAt: new Date(), lastError: null },
       },
-      { new: true },
+      { returnDocument: 'after' },
     );
     if (!job) {
       return res.status(404).json({ error: 'No se encontró una notificación fallida para reintentar.' });

@@ -64,7 +64,12 @@ export async function approvePayment(paymentId) {
           },
           $setOnInsert: { userId: user._id, clientId },
         },
-        { upsert: true, new: true, runValidators: true, session: mongoSession },
+        {
+          upsert: true,
+          returnDocument: 'after',
+          runValidators: true,
+          session: mongoSession,
+        },
       );
 
       payment.clientId = clientId;

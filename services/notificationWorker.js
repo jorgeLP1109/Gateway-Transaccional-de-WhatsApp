@@ -69,7 +69,7 @@ async function processOneJob() {
       $set: { status: 'sending' },
       $inc: { attempts: 1 },
     },
-    { new: true, sort: { nextAttemptAt: 1 } },
+    { returnDocument: 'after', sort: { nextAttemptAt: 1 } },
   );
 
   if (!job) {
