@@ -70,3 +70,12 @@ production.
 The welcome WhatsApp message necessarily carries the newly generated client ID
 and API key as requested. Treat the recipient phone as trusted, protect the
 system sender account, and avoid sharing those messages.
+
+## Commercial pages
+
+The public site is served from `public/`: `/`, `/login.html`, `/register.html`,
+`/checkout.html`, `/dashboard.html`, and `/admin.html`. The pages use Tailwind
+from its CDN and small native ES modules under `public/js/`; no CSS build step is
+needed. `/connect/:clientId` serves `public/connect.html` so the landing page
+does not replace the WhatsApp pairing view. The landing and checkout read
+configured prices from `GET /api/v1/plans`.

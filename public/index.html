@@ -1,50 +1,200 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Conectar WhatsApp</title>
+    <meta name="theme-color" content="#090d16">
+    <meta name="description" content="Automatiza WhatsApp con una API confiable, sesiones aisladas y pagos integrados.">
+    <title>WaGateway — WhatsApp, conectado a tu negocio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: '#090d16',
+              panel: '#111827',
+              mint: '#7cf7c8',
+              violet: '#a78bfa',
+            },
+            boxShadow: { glow: '0 0 80px rgba(124,247,200,.13)' },
+          },
+        },
+      };
+    </script>
     <style>
-      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
-      main { width: min(92vw, 34rem); padding: 2rem; border: 1px solid #8886; border-radius: 1rem; }
-      input, button { box-sizing: border-box; width: 100%; padding: .8rem; margin: .35rem 0; }
-      img { display: block; width: min(100%, 20rem); margin: 1rem auto; background: white; }
-      #status { min-height: 1.5rem; }
+      body { background: radial-gradient(ellipse at 78% 12%, rgba(83,68,160,.17), transparent 32rem), #090d16; }
+      .grid-pattern { background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to bottom, black, transparent 85%); }
+      pre { tab-size: 2; }
     </style>
   </head>
-  <body>
+  <body class="min-h-screen text-slate-100 antialiased selection:bg-mint/30">
+    <header class="sticky top-0 z-20 border-b border-white/5 bg-ink/75 backdrop-blur-xl">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegación principal">
+        <a href="/" class="flex items-center gap-2.5 font-semibold tracking-tight">
+          <span class="grid size-9 place-items-center rounded-xl bg-mint text-ink">W</span>
+          Wa<span class="text-mint">Gateway</span>
+        </a>
+        <div class="hidden items-center gap-8 text-sm text-slate-400 md:flex">
+          <a class="transition hover:text-white" href="#planes">Planes</a>
+          <a class="transition hover:text-white" href="#desarrolladores">Desarrolladores</a>
+          <a class="transition hover:text-white" href="#faq">FAQ</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="/login.html" class="hidden text-sm text-slate-300 transition hover:text-white sm:inline">Iniciar sesión</a>
+          <a href="/register.html" class="rounded-xl bg-mint px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-white">Crear cuenta <span aria-hidden="true">↗</span></a>
+        </div>
+      </nav>
+    </header>
+
     <main>
-      <h1>Conectar WhatsApp</h1>
-      <p>Ingresa tu API key. Se usa solo en esta página para consultar el QR.</p>
-      <label for="api-key">API key</label>
-      <input id="api-key" type="password" autocomplete="off">
-      <button id="load" type="button">Consultar estado</button>
-      <p id="status" role="status"></p>
-      <img id="qr" alt="Código QR de vinculación" hidden>
+      <section class="relative isolate overflow-hidden">
+        <div class="grid-pattern absolute inset-0 -z-10"></div>
+        <div class="mx-auto grid max-w-7xl items-center gap-16 px-5 pb-24 pt-20 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:pb-32 lg:pt-28">
+          <div>
+            <div class="mb-7 inline-flex items-center gap-2 rounded-full border border-mint/20 bg-mint/5 px-3.5 py-2 text-xs font-medium text-mint">
+              <span class="relative flex size-2"><span class="absolute inline-flex size-full animate-ping rounded-full bg-mint opacity-60"></span><span class="relative inline-flex size-2 rounded-full bg-mint"></span></span>
+              API para WhatsApp, lista para integrar
+            </div>
+            <h1 class="max-w-3xl text-5xl font-semibold leading-[1.06] tracking-[-.055em] sm:text-6xl lg:text-7xl">
+              Conversaciones que hacen avanzar <span class="bg-gradient-to-r from-mint to-violet bg-clip-text text-transparent">tu negocio.</span>
+            </h1>
+            <p class="mt-7 max-w-xl text-lg leading-8 text-slate-400">
+              Conecta WhatsApp a tus productos en minutos. Una API simple para enviar mensajes, gestionar tus sesiones y escalar con confianza.
+            </p>
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+              <a href="/register.html" class="inline-flex items-center justify-center gap-2 rounded-xl bg-mint px-6 py-3.5 font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-white">Empieza ahora <span aria-hidden="true">→</span></a>
+              <a href="#desarrolladores" class="inline-flex items-center justify-center rounded-xl border border-white/10 px-6 py-3.5 font-medium text-white transition hover:border-white/25 hover:bg-white/5">Explorar la API</a>
+            </div>
+            <div class="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-slate-500">
+              <span>✓ Integración REST</span><span>✓ Sesiones aisladas</span><span>✓ Soporte para desarrolladores</span>
+            </div>
+          </div>
+          <div class="relative mx-auto w-full max-w-lg">
+            <div class="absolute -inset-8 -z-10 rounded-full bg-violet/10 blur-3xl"></div>
+            <div class="rounded-3xl border border-white/10 bg-panel/80 p-5 shadow-glow backdrop-blur sm:p-7">
+              <div class="mb-6 flex items-center justify-between">
+                <div><p class="text-sm font-medium text-white">Actividad de mensajes</p><p class="mt-1 text-xs text-slate-500">Vista de ejemplo de la API</p></div>
+                <span class="rounded-full border border-mint/20 bg-mint/10 px-2.5 py-1 text-xs text-mint">● Conectado</span>
+              </div>
+              <div class="space-y-3">
+                <div class="flex gap-3 rounded-2xl border border-white/5 bg-white/[.035] p-4">
+                  <span class="grid size-10 shrink-0 place-items-center rounded-full bg-violet/15 text-violet">API</span>
+                  <div class="min-w-0"><p class="text-sm font-medium">Mensaje enviado</p><p class="mt-1 truncate text-xs text-slate-500">/api/v1/send-message · hace un momento</p></div>
+                  <span class="ml-auto text-xs text-mint">200</span>
+                </div>
+                <div class="flex gap-3 rounded-2xl border border-white/5 bg-white/[.035] p-4">
+                  <span class="grid size-10 shrink-0 place-items-center rounded-full bg-mint/10 text-mint">WA</span>
+                  <div><p class="text-sm font-medium">Sesión lista</p><p class="mt-1 text-xs text-slate-500">Conexión segura y activa</p></div>
+                  <span class="ml-auto text-xs text-slate-500">hace 2m</span>
+                </div>
+                <div class="rounded-2xl border border-white/5 bg-[#090d16] p-4 font-mono text-xs leading-6">
+                  <p class="text-slate-500"><span class="text-violet">POST</span> /api/v1/send-message</p>
+                  <p class="text-slate-400">{ <span class="text-mint">"message"</span>: <span class="text-amber-200">"¡Hola!"</span> }</p>
+                  <p class="mt-2 text-mint">✓ success: true</p>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="rounded-xl border border-white/5 p-4"><p class="text-xs text-slate-500">Integración</p><p class="mt-1 font-medium">Simple y directa</p></div>
+                <div class="rounded-xl border border-white/5 p-4"><p class="text-xs text-slate-500">Control</p><p class="mt-1 font-medium">Desde tu dashboard</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="planes" class="border-y border-white/5 bg-white/[.015]">
+        <div class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="text-sm font-semibold uppercase tracking-[.2em] text-mint">Planes</p>
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">Elige cómo quieres crecer</h2>
+            <p class="mt-4 text-slate-400">Empieza con lo esencial y cambia de plan cuando lo necesites.</p>
+          </div>
+          <div class="mx-auto mt-12 grid max-w-4xl gap-5 md:grid-cols-2">
+            <article class="rounded-3xl border border-white/10 bg-panel/60 p-7 sm:p-9">
+              <div class="flex items-start justify-between"><div><h3 class="text-xl font-semibold">Básico</h3><p class="mt-2 text-sm text-slate-400">Todo lo necesario para empezar.</p></div><span class="rounded-lg bg-white/5 px-2.5 py-1 text-xs text-slate-400">BASIC</span></div>
+              <p class="mt-8 text-4xl font-semibold tracking-tight" data-plan-price="basic">Consulta precio</p>
+              <p class="mt-1 text-sm text-slate-500">por período de suscripción</p>
+              <ul class="mt-7 space-y-3 text-sm text-slate-300"><li>✓ Acceso a la API de WhatsApp</li><li>✓ Una instancia dedicada</li><li>✓ Dashboard y clave API</li><li>✓ Renovación sencilla</li></ul>
+              <a href="/register.html?plan=basic" class="mt-8 block rounded-xl border border-white/10 px-5 py-3 text-center font-medium transition hover:border-mint/50 hover:text-mint">Elegir Básico</a>
+            </article>
+            <article class="relative rounded-3xl border border-mint/30 bg-gradient-to-b from-mint/[.08] to-panel/70 p-7 shadow-glow sm:p-9">
+              <span class="absolute right-6 top-6 rounded-full bg-mint px-3 py-1 text-xs font-semibold text-ink">MÁS FLEXIBLE</span>
+              <div><h3 class="text-xl font-semibold">Pro</h3><p class="mt-2 text-sm text-slate-400">Para operaciones que necesitan más.</p></div>
+              <p class="mt-8 text-4xl font-semibold tracking-tight" data-plan-price="pro">Consulta precio</p>
+              <p class="mt-1 text-sm text-slate-500">por período de suscripción</p>
+              <ul class="mt-7 space-y-3 text-sm text-slate-300"><li>✓ Todo lo incluido en Básico</li><li>✓ Mayor capacidad de operación</li><li>✓ Integración con pagos</li><li>✓ Atención prioritaria</li></ul>
+              <a href="/register.html?plan=pro" class="mt-8 block rounded-xl bg-mint px-5 py-3 text-center font-semibold text-ink transition hover:bg-white">Elegir Pro</a>
+            </article>
+          </div>
+          <p id="pricing-note" class="mt-5 text-center text-xs text-slate-500" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="desarrolladores" class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[.2em] text-mint">Diseñada para integrar</p>
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">De tu código a WhatsApp, sin fricción.</h2>
+            <p class="mt-5 max-w-xl leading-7 text-slate-400">Usa endpoints claros, autenticación con API key y respuestas JSON predecibles. Construye el flujo con el lenguaje que ya conoces.</p>
+            <a href="/register.html" class="mt-7 inline-flex items-center gap-2 font-medium text-mint hover:text-white">Crear una cuenta <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-[#0b101b]">
+            <div class="flex items-center gap-2 border-b border-white/5 px-5 py-3"><span class="size-2.5 rounded-full bg-rose-400/80"></span><span class="size-2.5 rounded-full bg-amber-300/80"></span><span class="size-2.5 rounded-full bg-mint/80"></span><span class="ml-2 text-xs text-slate-500">Enviar un mensaje</span></div>
+            <div class="grid gap-0 md:grid-cols-2">
+              <div class="border-b border-white/5 p-5 md:border-b-0 md:border-r">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">cURL</p>
+                <pre class="overflow-x-auto whitespace-pre-wrap break-all font-mono text-xs leading-6 text-slate-300"><code><span class="text-violet">curl</span> -X POST \
+  https://tu-gateway/api/v1/send-message \
+  -H <span class="text-mint">'x-api-key: TU_API_KEY'</span> \
+  -H <span class="text-mint">'Content-Type: application/json'</span> \
+  -d <span class="text-amber-200">'{"phone":"58412...","message":"Hola"}'</span></code></pre>
+              </div>
+              <div class="p-5">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Node.js</p>
+                <pre class="overflow-x-auto whitespace-pre-wrap break-all font-mono text-xs leading-6 text-slate-300"><code><span class="text-violet">const</span> response = <span class="text-violet">await</span> fetch(
+  <span class="text-amber-200">'https://tu-gateway/api/v1/send-message'</span>,
+  {
+    method: <span class="text-mint">'POST'</span>,
+    headers: {
+      <span class="text-mint">'x-api-key'</span>: process.env.WA_API_KEY,
+      <span class="text-mint">'content-type'</span>: <span class="text-amber-200">'application/json'</span>
+    },
+    body: JSON.stringify({
+      phone: <span class="text-amber-200">'58412...'</span>,
+      message: <span class="text-amber-200">'Hola 👋'</span>
+    })
+  }
+);</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="border-t border-white/5 bg-white/[.015]">
+        <div class="mx-auto max-w-4xl px-5 py-20 lg:px-8">
+          <div class="text-center"><p class="text-sm font-semibold uppercase tracking-[.2em] text-mint">Preguntas frecuentes</p><h2 class="mt-3 text-3xl font-semibold">Empieza con claridad</h2></div>
+          <div class="mt-10 divide-y divide-white/10">
+            <details class="group py-5"><summary class="flex cursor-pointer list-none items-center justify-between font-medium">¿Cómo conecto mi WhatsApp?<span class="text-mint transition group-open:rotate-45">+</span></summary><p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Después de activar tu plan, abre el dashboard y escanea el código QR con WhatsApp en tu teléfono, desde Dispositivos vinculados.</p></details>
+            <details class="group py-5"><summary class="flex cursor-pointer list-none items-center justify-between font-medium">¿Puedo integrar la API con mi aplicación?<span class="text-mint transition group-open:rotate-45">+</span></summary><p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Sí. Los ejemplos de cURL y Node.js muestran el envío de mensajes con una solicitud HTTP autenticada.</p></details>
+            <details class="group py-5"><summary class="flex cursor-pointer list-none items-center justify-between font-medium">¿Cómo puedo pagar?<span class="text-mint transition group-open:rotate-45">+</span></summary><p class="mt-3 max-w-3xl text-sm leading-6 text-slate-400">Al registrarte podrás consultar los métodos disponibles para tu cuenta, incluidos Pago Móvil, Facebank/Pipol Pay, Binance Pay y PayPal.</p></details>
+          </div>
+        </div>
+      </section>
+      <section class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+        <div class="flex flex-col items-start justify-between gap-6 rounded-3xl border border-mint/15 bg-gradient-to-r from-mint/[.08] to-violet/[.08] p-8 sm:p-12 md:flex-row md:items-center">
+          <div><p class="text-sm font-semibold text-mint">Tu siguiente integración empieza aquí</p><h2 class="mt-2 text-2xl font-semibold sm:text-3xl">Conecta tu producto con WhatsApp.</h2></div>
+          <a href="/register.html" class="shrink-0 rounded-xl bg-mint px-6 py-3.5 font-semibold text-ink transition hover:bg-white">Crear mi cuenta <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
     </main>
-    <script>
-      const clientId = decodeURIComponent(location.pathname.split('/').pop());
-      const status = document.querySelector('#status');
-      const qr = document.querySelector('#qr');
-      document.querySelector('#load').addEventListener('click', async () => {
-        status.textContent = 'Consultando…';
-        qr.hidden = true;
-        try {
-          const response = await fetch(`/api/v1/instance/qr/${encodeURIComponent(clientId)}`, {
-            headers: { 'x-api-key': document.querySelector('#api-key').value },
-          });
-          const data = await response.json();
-          if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
-          status.textContent = `Estado: ${data.status}`;
-          if (data.qr) {
-            qr.src = data.qr;
-            qr.hidden = false;
-          }
-        } catch (error) {
-          status.textContent = error.message;
-        }
-      });
-    </script>
+    <footer class="border-t border-white/5">
+      <div class="mx-auto flex max-w-7xl flex-col justify-between gap-3 px-5 py-7 text-sm text-slate-500 sm:flex-row lg:px-8">
+        <p>© <span data-current-year></span> WaGateway. Mensajería que conecta.</p>
+        <div class="flex gap-5"><a class="hover:text-white" href="/login.html">Iniciar sesión</a><a class="hover:text-white" href="/register.html">Crear cuenta</a></div>
+      </div>
+    </footer>
+    <script type="module" src="/js/landing.js"></script>
   </body>
 </html>

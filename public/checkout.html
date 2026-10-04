@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d16">
+    <title>Activar plan — WaGateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{ink:'#090d16',panel:'#111827',mint:'#7cf7c8',violet:'#a78bfa'}}}}</script>
+  </head>
+  <body class="min-h-screen bg-ink text-slate-100 antialiased">
+    <header class="border-b border-white/5"><nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4"><a href="/" class="font-semibold">Wa<span class="text-mint">Gateway</span></a><a href="/dashboard.html" class="text-sm text-slate-400 hover:text-white">Dashboard →</a></nav></header>
+    <main class="mx-auto max-w-5xl px-5 py-10 sm:py-14">
+      <div class="max-w-2xl"><p class="text-sm font-semibold uppercase tracking-[.18em] text-mint">Checkout seguro</p><h1 class="mt-3 text-3xl font-semibold sm:text-4xl">Activa tu suscripción</h1><p class="mt-3 text-slate-400">Selecciona un plan y método de pago. Tu acceso se habilitará al confirmarse el pago.</p></div>
+      <div class="mt-8 grid gap-6 lg:grid-cols-[.75fr_1.25fr]">
+        <aside class="h-fit rounded-2xl border border-white/10 bg-panel p-6">
+          <label for="plan" class="text-sm font-medium">Plan</label>
+          <select id="plan" class="mt-2 w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60"><option value="basic">Básico</option><option value="pro">Pro</option></select>
+          <div class="mt-5 border-t border-white/10 pt-5"><p class="text-sm text-slate-400">Precio del período</p><p id="price" class="mt-1 text-3xl font-semibold">Consultando…</p><p id="period" class="mt-1 text-xs text-slate-500"></p></div>
+          <p class="mt-5 rounded-xl bg-white/[.04] p-4 text-xs leading-5 text-slate-400">Pago Móvil y Facebank/Pipol Pay se revisan manualmente. Binance Pay y PayPal confirman automáticamente al completarse.</p>
+        </aside>
+        <section class="rounded-2xl border border-white/10 bg-panel p-5 sm:p-7">
+          <h2 class="text-lg font-semibold">Método de pago</h2>
+          <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4" role="tablist" aria-label="Métodos de pago">
+            <button type="button" data-method="pago_movil" class="method-tab rounded-xl border border-mint/50 bg-mint/10 px-3 py-3 text-sm font-medium text-mint">Pago Móvil</button>
+            <button type="button" data-method="facebank" class="method-tab rounded-xl border border-white/10 px-3 py-3 text-sm text-slate-300 hover:border-white/25">Facebank</button>
+            <button type="button" data-method="binance" class="method-tab rounded-xl border border-white/10 px-3 py-3 text-sm text-slate-300 hover:border-white/25">Binance Pay</button>
+            <button type="button" data-method="paypal" class="method-tab rounded-xl border border-white/10 px-3 py-3 text-sm text-slate-300 hover:border-white/25">PayPal</button>
+          </div>
+          <div id="payment-content" class="mt-6 min-h-48" aria-live="polite"></div>
+          <p id="checkout-notice" role="status" hidden></p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/js/checkout.js"></script>
+  </body>
+</html>

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { generateKeyPairSync, sign } from 'node:crypto';
 import { decryptApiKey, encryptApiKey, hashApiKey } from '../services/cryptoService.js';
 import { verifyBinanceWebhook } from '../services/paymentProviders.js';
+import { formatMoney } from '../public/js/api.js';
 
 test('API keys encrypt/decrypt and hash consistently', () => {
   process.env.API_KEY_ENCRYPTION_SECRET = 'test-only-encryption-secret-at-least-32-bytes';
@@ -13,6 +14,12 @@ test('API keys encrypt/decrypt and hash consistently', () => {
   assert.equal(decryptApiKey(encrypted), apiKey);
   assert.equal(hashApiKey(apiKey), hashApiKey(apiKey));
   assert.notEqual(hashApiKey(apiKey), hashApiKey('another-key'));
+});
+
+test('money formatting supports fiat currencies and Binance USDT', () => {
+  assert.match(formatMoney(12.5, 'USD'), /12,50/);
+  assert.match(formatMoney(12.5, 'VES'), /12,50/);
+  assert.equal(formatMoney(12.5, 'USDT'), '12,50 USDT');
 });
 
 test('Binance webhook requires a current valid RSA signature over the raw body', () => {

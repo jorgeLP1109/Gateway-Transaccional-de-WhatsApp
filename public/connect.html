@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d16">
+    <title>Conectar WhatsApp — WaGateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{ink:'#090d16',panel:'#111827',mint:'#7cf7c8'}}}}</script>
+  </head>
+  <body class="grid min-h-screen place-items-center bg-ink px-5 py-10 text-slate-100 antialiased">
+    <main class="w-full max-w-xl rounded-3xl border border-white/10 bg-panel p-6 text-center shadow-2xl sm:p-10">
+      <a href="/" class="text-sm font-semibold">Wa<span class="text-mint">Gateway</span></a>
+      <p class="mt-8 text-sm font-medium text-mint">Vinculación segura</p>
+      <h1 class="mt-2 text-3xl font-semibold">Conecta tu WhatsApp</h1>
+      <p class="mt-3 text-sm leading-6 text-slate-400">Abre WhatsApp en tu teléfono → Dispositivos vinculados → Vincular dispositivo y escanea el código.</p>
+      <div class="mx-auto mt-7 grid size-64 place-items-center rounded-2xl border border-white/5 bg-white/[.03] p-3">
+        <img id="qr" class="hidden max-h-full max-w-full rounded-xl bg-white p-2" alt="Código QR para conectar WhatsApp">
+        <p id="qr-placeholder" class="px-5 text-sm leading-6 text-slate-500">Solicitando código QR…</p>
+      </div>
+      <p id="status" role="status" class="mt-5 text-sm text-slate-300">Conectando con el servidor…</p>
+      <p id="client-id" class="mt-2 break-all font-mono text-xs text-slate-600"></p>
+      <a id="dashboard" href="/dashboard.html" class="mt-6 hidden rounded-xl bg-mint px-5 py-3 font-semibold text-ink hover:bg-white">Volver al dashboard →</a>
+      <p id="login-hint" class="mt-5 hidden text-sm text-slate-400">Inicia sesión con la cuenta propietaria de esta instancia y vuelve a abrir este enlace.</p>
+    </main>
+    <script type="module" src="/js/connect.js"></script>
+  </body>
+</html>

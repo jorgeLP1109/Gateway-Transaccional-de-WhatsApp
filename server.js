@@ -3,7 +3,7 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { connectDatabase } from './config/database.js';
-import { validateSecurityConfiguration } from './config/settings.js';
+import { plans, validateSecurityConfiguration } from './config/settings.js';
 import { bootstrapAdmin } from './controllers/authController.js';
 import authRoutes from './routes/authRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
@@ -39,7 +39,24 @@ app.get('/connect/:clientId', (req, res) => {
   if (!isValidClientId(req.params.clientId)) {
     return res.status(400).send('clientId inválido.');
   }
-  return res.sendFile(path.join(currentDirectory, 'public', 'index.html'));
+  return res.sendFile(path.join(currentDirectory, 'public', 'connect.html'));
+});
+
+app.get('/api/v1/plans', (_req, res) => {
+  const result = Object.fromEntries(
+    plans.map((plan) => {
+      const priceUsd = Number(process.env[`PLAN_${plan.toUpperCase()}_USD`]);
+      return [
+        plan,
+        {
+          name: plan === 'basic' ? 'Básico' : 'Pro',
+          priceUsd: Number.isFinite(priceUsd) && priceUsd > 0 ? priceUsd : null,
+          durationDays: Number(process.env.SUBSCRIPTION_DURATION_DAYS || 30),
+        },
+      ];
+    }),
+  );
+  return res.json({ plans: result });
 });
 
 app.use('/api/v1/auth', authRoutes);

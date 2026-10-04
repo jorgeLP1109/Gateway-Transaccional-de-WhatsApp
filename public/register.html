@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d16">
+    <title>Crear cuenta — WaGateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{ink:'#090d16',panel:'#111827',mint:'#7cf7c8'}}}}</script>
+  </head>
+  <body class="min-h-screen bg-ink text-slate-100 antialiased">
+    <main class="mx-auto flex min-h-screen max-w-6xl items-center justify-center px-5 py-12">
+      <div class="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-panel/70 shadow-2xl md:grid-cols-[.9fr_1.1fr]">
+        <section class="hidden flex-col justify-between bg-gradient-to-br from-emerald-300/10 via-violet-400/10 to-transparent p-10 md:flex">
+          <a href="/" class="font-semibold">Wa<span class="text-mint">Gateway</span></a>
+          <div><p class="text-sm font-medium text-mint">Empieza hoy</p><h1 class="mt-4 text-4xl font-semibold leading-tight">Tu gateway, a un registro de distancia.</h1><p class="mt-4 leading-7 text-slate-400">Crea tu cuenta, elige un plan y conecta tu WhatsApp en minutos.</p></div>
+          <p class="text-xs text-slate-500">Tus credenciales se protegen con cifrado.</p>
+        </section>
+        <section class="p-7 sm:p-10">
+          <a href="/" class="font-semibold md:hidden">Wa<span class="text-mint">Gateway</span></a>
+          <div class="mt-7 md:mt-0"><p class="text-sm font-medium text-mint">Cuenta nueva</p><h2 class="mt-2 text-3xl font-semibold">Crea tu cuenta</h2><p class="mt-2 text-sm text-slate-400">Te tomará menos de un minuto.</p></div>
+          <form id="register-form" class="mt-7 grid gap-4 sm:grid-cols-2">
+            <div class="sm:col-span-2"><label for="name" class="mb-2 block text-sm font-medium">Nombre</label><input id="name" name="name" required minlength="2" maxlength="120" autocomplete="name" class="w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60" placeholder="Tu nombre"></div>
+            <div class="sm:col-span-2"><label for="email" class="mb-2 block text-sm font-medium">Correo electrónico</label><input id="email" name="email" type="email" required maxlength="254" autocomplete="email" class="w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60" placeholder="tu@empresa.com"></div>
+            <div><label for="phone" class="mb-2 block text-sm font-medium">WhatsApp</label><input id="phone" name="phone" type="tel" required autocomplete="tel" pattern="[+0-9 ()().-]{8,24}" class="w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60" placeholder="+58 412 000 0000"></div>
+            <div><label for="password" class="mb-2 block text-sm font-medium">Contraseña</label><input id="password" name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password" class="w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60" placeholder="12 caracteres o más"></div>
+            <p id="form-notice" role="status" hidden class="sm:col-span-2"></p>
+            <button id="submit-button" class="mt-2 w-full rounded-xl bg-mint px-5 py-3.5 font-semibold text-ink transition hover:bg-white disabled:cursor-wait disabled:opacity-60 sm:col-span-2">Crear cuenta y continuar <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="mt-6 text-center text-sm text-slate-400">¿Ya tienes cuenta? <a href="/login.html" class="font-medium text-mint hover:text-white">Inicia sesión</a></p>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/js/register.js"></script>
+  </body>
+</html>

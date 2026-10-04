@@ -55,6 +55,12 @@ export async function createPaypalPayOrder(payment) {
   const accessToken = await paypalAccessToken();
   const body = {
     intent: 'CAPTURE',
+    application_context: {
+      brand_name: process.env.PAYPAL_BRAND_NAME || 'WaGateway',
+      user_action: 'PAY_NOW',
+      return_url: `${(process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '')}/checkout.html?plan=${encodeURIComponent(payment.plan)}`,
+      cancel_url: `${(process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '')}/checkout.html?plan=${encodeURIComponent(payment.plan)}&payment=cancelled`,
+    },
     purchase_units: [{
       reference_id: String(payment._id),
       custom_id: String(payment._id),

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d16">
+    <title>Dashboard — WaGateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{ink:'#090d16',panel:'#111827',mint:'#7cf7c8'}}}}</script>
+  </head>
+  <body class="min-h-screen bg-ink text-slate-100 antialiased">
+    <header class="border-b border-white/5 bg-ink/80">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+        <a href="/" class="font-semibold">Wa<span class="text-mint">Gateway</span></a>
+        <div class="flex items-center gap-4"><span id="user-name" class="hidden text-sm text-slate-400 sm:inline"></span><button id="logout" class="text-sm text-slate-400 hover:text-white">Cerrar sesión</button></div>
+      </nav>
+    </header>
+    <main class="mx-auto max-w-7xl px-5 py-8 sm:py-12">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div><p class="text-sm font-medium text-mint">Espacio de trabajo</p><h1 class="mt-2 text-3xl font-semibold">Tu dashboard</h1><p id="welcome" class="mt-2 text-slate-400">Administra tu suscripción y conexión.</p></div>
+        <a href="/checkout.html" class="inline-flex justify-center rounded-xl border border-white/10 px-4 py-2.5 text-sm hover:border-mint/40 hover:text-mint">Renovar o cambiar plan →</a>
+      </div>
+      <div id="page-notice" role="status" hidden></div>
+      <div class="mt-8 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
+        <section class="rounded-2xl border border-white/10 bg-panel p-5 sm:p-7">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div><p class="text-sm text-slate-400">Instancia WhatsApp</p><p id="instance-state" class="mt-1 text-xl font-semibold">Consultando…</p></div>
+            <span id="plan-badge" class="rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-300">Sin suscripción</span>
+          </div>
+          <p id="client-id" class="mt-4 break-all font-mono text-xs text-slate-500">clientId pendiente</p>
+          <div class="mt-6 flex flex-col items-center rounded-2xl border border-dashed border-white/10 bg-ink/60 p-5 text-center">
+            <img id="instance-qr" class="hidden size-56 rounded-xl bg-white p-2" alt="Código QR para vincular WhatsApp">
+            <div id="qr-placeholder" class="grid size-56 place-items-center rounded-xl bg-white/[.03] px-8 text-sm leading-6 text-slate-500">El código QR aparecerá aquí cuando la instancia esté lista.</div>
+            <p id="qr-status" class="mt-4 text-sm text-slate-400">Preparando conexión…</p>
+            <a id="connect-link" href="#" target="_blank" rel="noopener noreferrer" class="mt-3 hidden text-sm font-medium text-mint hover:text-white">Abrir pantalla de conexión ↗</a>
+            <button id="refresh-qr" class="mt-4 rounded-lg border border-white/10 px-4 py-2 text-sm hover:border-mint/40">Actualizar estado</button>
+          </div>
+          <p class="mt-4 text-xs leading-5 text-slate-500">En WhatsApp, abre Dispositivos vinculados y escanea el código. Mantén esta pestaña abierta hasta que la conexión quede activa.</p>
+        </section>
+
+        <div class="space-y-5">
+          <section class="rounded-2xl border border-white/10 bg-panel p-5 sm:p-7">
+            <div class="flex items-start justify-between gap-4"><div><h2 class="font-semibold">Tu API Key</h2><p class="mt-1 text-sm text-slate-400">Úsala para autenticar tus solicitudes.</p></div><span class="rounded-full bg-amber-300/10 px-2.5 py-1 text-xs text-amber-200">Privada</span></div>
+            <div class="mt-5 flex gap-2"><input id="api-key" readonly type="password" autocomplete="off" placeholder="Rota o registra tu API key para mostrarla" class="min-w-0 flex-1 rounded-xl border border-white/10 bg-ink px-3 py-3 font-mono text-xs text-slate-300 outline-none"><button id="toggle-api-key" type="button" class="rounded-xl border border-white/10 px-3 text-sm hover:border-white/25" aria-label="Mostrar API key">Mostrar</button></div>
+            <div class="mt-3 flex flex-wrap gap-2"><button id="copy-api-key" class="rounded-lg bg-white/5 px-3 py-2 text-xs text-slate-300 hover:bg-white/10">Copiar</button><button id="rotate-api-key" class="rounded-lg border border-rose-300/20 px-3 py-2 text-xs text-rose-200 hover:bg-rose-300/10">Generar API key nueva</button></div>
+            <p class="mt-3 text-xs leading-5 text-slate-500">Al generar una clave nueva, la anterior deja de funcionar. Guárdala en un gestor seguro.</p>
+          </section>
+          <section class="rounded-2xl border border-white/10 bg-panel p-5 sm:p-7">
+            <div><h2 class="font-semibold">Prueba de envío</h2><p class="mt-1 text-sm text-slate-400">Envía un mensaje a un número con código de país.</p></div>
+            <form id="send-form" class="mt-5 space-y-4">
+              <div><label for="number" class="mb-2 block text-sm font-medium">Número</label><input id="number" type="tel" required placeholder="+58 412 000 0000" class="w-full rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60"></div>
+              <div><label for="message" class="mb-2 block text-sm font-medium">Mensaje</label><textarea id="message" required rows="3" maxlength="4000" placeholder="Escribe un mensaje de prueba" class="w-full resize-y rounded-xl border border-white/10 bg-ink px-4 py-3 outline-none focus:border-mint/60"></textarea></div>
+              <button id="send-button" class="w-full rounded-xl bg-mint px-5 py-3 font-semibold text-ink transition hover:bg-white disabled:opacity-60">Enviar mensaje <span aria-hidden="true">→</span></button>
+            </form>
+            <p id="send-notice" role="status" hidden></p>
+          </section>
+        </div>
+      </div>
+      <section class="mt-5 rounded-2xl border border-white/10 bg-panel p-5 sm:p-7">
+        <div class="flex items-center justify-between"><div><h2 class="font-semibold">Pagos recientes</h2><p class="mt-1 text-sm text-slate-400">Estado de tus últimos pagos.</p></div><a href="/checkout.html" class="text-sm text-mint hover:text-white">Realizar un pago →</a></div>
+        <div class="mt-5 overflow-x-auto"><table class="w-full min-w-[34rem] text-left text-sm"><thead class="text-xs uppercase tracking-wide text-slate-500"><tr><th class="pb-3 font-medium">Referencia</th><th class="pb-3 font-medium">Método</th><th class="pb-3 font-medium">Importe</th><th class="pb-3 font-medium">Estado</th><th class="pb-3 font-medium">Fecha</th></tr></thead><tbody id="payment-history" class="divide-y divide-white/5 text-slate-300"><tr><td colspan="5" class="py-4 text-slate-500">Cargando historial…</td></tr></tbody></table></div>
+      </section>
+    </main>
+    <script type="module" src="/js/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090d16">
+    <title>Administración — WaGateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{ink:'#090d16',panel:'#111827',mint:'#7cf7c8'}}}}</script>
+  </head>
+  <body class="min-h-screen bg-ink text-slate-100 antialiased">
+    <header class="border-b border-white/5"><nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4"><a href="/" class="font-semibold">Wa<span class="text-mint">Gateway</span> <span class="ml-2 text-xs font-normal text-slate-500">ADMIN</span></a><div class="flex items-center gap-4"><a href="/dashboard.html" class="text-sm text-slate-400 hover:text-white">Dashboard</a><button id="logout" class="text-sm text-slate-400 hover:text-white">Cerrar sesión</button></div></nav></header>
+    <main class="mx-auto max-w-7xl px-5 py-10">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="text-sm font-semibold uppercase tracking-[.18em] text-mint">Administración</p><h1 class="mt-2 text-3xl font-semibold">Revisión de pagos</h1><p class="mt-2 text-slate-400">Aprueba o rechaza reportes manuales de Pago Móvil y Facebank.</p></div><button id="refresh" class="rounded-xl border border-white/10 px-4 py-2.5 text-sm hover:border-mint/40">Actualizar pagos ↻</button></div>
+      <div id="admin-notice" role="status" hidden></div>
+      <section class="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-panel">
+        <div class="flex items-center justify-between border-b border-white/5 px-5 py-4"><div><h2 class="font-semibold">Pagos pendientes</h2><p id="payment-count" class="mt-1 text-xs text-slate-500">Cargando…</p></div><span class="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs text-amber-200">Revisión manual</span></div>
+        <div class="overflow-x-auto"><table class="w-full min-w-[850px] text-left text-sm"><thead class="bg-white/[.025] text-xs uppercase tracking-wide text-slate-500"><tr><th class="px-5 py-4 font-medium">Cliente</th><th class="px-4 py-4 font-medium">Método</th><th class="px-4 py-4 font-medium">Referencia</th><th class="px-4 py-4 font-medium">Plan / importe</th><th class="px-4 py-4 font-medium">Comprobante</th><th class="px-4 py-4 font-medium">Fecha</th><th class="px-5 py-4 text-right font-medium">Acciones</th></tr></thead><tbody id="pending-payments" class="divide-y divide-white/5"><tr><td colspan="7" class="px-5 py-10 text-center text-slate-500">Cargando reportes…</td></tr></tbody></table></div>
+      </section>
+      <p class="mt-4 text-xs leading-5 text-slate-500">Antes de aprobar, verifica el ingreso real en el banco y compara la referencia, el importe y el titular. No marques pagos como aprobados solo por una captura de pantalla.</p>
+    </main>
+    <script type="module" src="/js/admin.js"></script>
+  </body>
+</html>
