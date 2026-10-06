@@ -4,6 +4,7 @@ import PaymentLog from '../models/PaymentLog.js';
 import Subscription from '../models/Subscription.js';
 import User from '../models/User.js';
 import { decryptApiKey } from './cryptoService.js';
+import { sendWhatsAppMessage } from './whatsappMessaging.js';
 
 const maxAttempts = 10;
 const pollDelayMs = 5_000;
@@ -38,7 +39,6 @@ async function sendWelcome(job) {
     throw new Error('La sesión SYSTEM_WHATSAPP_CLIENT_ID no está conectada.');
   }
 
-  const recipient = user.phone.replace(/\D/g, '');
   const apiKey = decryptApiKey(user.apiKey);
   const baseUrl = (process.env.PUBLIC_BASE_URL || '').replace(/\/+$/, '');
   const connectUrl = baseUrl
@@ -52,7 +52,7 @@ async function sendWelcome(job) {
     'Guarda tu API Key en un lugar seguro y no la compartas.',
   ].join('\n');
 
-  await sender.sendMessage(`${recipient}@s.whatsapp.net`, { text: message });
+  await sendWhatsAppMessage(sender, user.phone, { text: message });
 }
 
 async function processOneJob() {

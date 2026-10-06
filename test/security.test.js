@@ -58,3 +58,16 @@ test('Binance webhook requires a current valid RSA signature over the raw body',
   headers['binancepay-timestamp'] = String(Date.now() - 6 * 60 * 1000);
   assert.equal(verifyBinanceWebhook(req), false);
 });
+import { getRandomDelay, normalizeWhatsAppJid } from '../services/whatsappMessaging.js';
+test('WhatsApp message helpers generate bounded delays and normalize valid phone JIDs', () => {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    const delay = getRandomDelay();
+    assert.ok(delay >= 3500 && delay <= 7500);
+  }
+  assert.equal(getRandomDelay(10, 10), 10);
+  assert.equal(normalizeWhatsAppJid('+1 (555) 123-4567'), '15551234567@s.whatsapp.net');
+  assert.equal(normalizeWhatsAppJid('15551234567@s.whatsapp.net'), '15551234567@s.whatsapp.net');
+  assert.throws(() => normalizeWhatsAppJid('invalid@s.whatsapp.net'), TypeError);
+  assert.throws(() => normalizeWhatsAppJid('1234567'), TypeError);
+  assert.throws(() => getRandomDelay(10, 5), RangeError);
+});

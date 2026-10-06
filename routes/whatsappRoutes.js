@@ -11,6 +11,7 @@ import {
   authenticateGatewayRequest,
   hasActiveClientSubscription,
 } from '../middleware/auth.js';
+import { normalizeWhatsAppJid, sendWhatsAppMessage } from '../services/whatsappMessaging.js';
 
 const router = Router();
 
@@ -168,12 +169,12 @@ router.post('/send-message', authenticateGatewayRequest, async (req, res) => {
 
   const phone = req.body?.phone ?? req.body?.number;
   const { message } = req.body ?? {};
-  if (typeof phone !== 'string' || !/^\+?[\d\s().-]+$/.test(phone)) {
-    return res.status(400).json({ error: 'phone/number debe ser un teléfono válido.' });
-  }
-  const digits = phone.replace(/\D/g, '');
-  if (digits.length < 8 || digits.length > 15) {
-    return res.status(400).json({ error: 'phone/number debe contener entre 8 y 15 dígitos.' });
+  let jid;
+  try {
+    jid = normalizeWhatsAppJid(phone);
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    return res.status(400).json({ error: 'phone/number debe contener entre 8 y 15 dígitos válidos.' });
   }
   if (typeof message !== 'string' || !message.trim()) {
     return res.status(400).json({ error: 'message debe ser un texto no vacío.' });
@@ -185,9 +186,8 @@ router.post('/send-message', authenticateGatewayRequest, async (req, res) => {
     return res.status(503).json({ error: 'La sesión de WhatsApp del cliente no está conectada.' });
   }
 
-  const jid = `${digits}@s.whatsapp.net`;
   try {
-    const result = await sock.sendMessage(jid, { text: message });
+    const result = await sendWhatsAppMessage(sock, jid, { text: message });
     return res.json({ success: true, to: jid, messageId: result?.key?.id ?? null });
   } catch (error) {
     console.error(`Error al enviar mensaje a ${jid}:`, error);

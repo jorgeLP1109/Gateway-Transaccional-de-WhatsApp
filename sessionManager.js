@@ -10,7 +10,8 @@ import makeWASocket, {
 
 const sessions = new Map();
 const sessionsDirectory = resolve(process.cwd(), 'sessions');
-const reconnectDelayMs = 3000;
+const minimumReconnectDelayMs = 5000;
+const maximumReconnectDelayMs = 5 * 60_000;
 const clientIdPattern = /^[a-zA-Z0-9_-]{1,64}$/;
 
 let baileysVersionPromise;
@@ -32,9 +33,14 @@ async function getBaileysVersion() {
   }
 }
 
-function scheduleReconnect(clientId, session, delayMs = reconnectDelayMs) {
+function scheduleReconnect(clientId, session) {
   if (sessions.get(clientId) !== session || session.reconnectTimer) return;
 
+  session.reconnectAttempts += 1;
+  const delayMs = Math.min(
+    minimumReconnectDelayMs * 2 ** (session.reconnectAttempts - 1),
+    maximumReconnectDelayMs,
+  );
   console.log(`[${clientId}] Reintentando conexión de WhatsApp en ${delayMs / 1000} segundos...`);
   session.reconnectTimer = setTimeout(() => {
     session.reconnectTimer = undefined;
@@ -100,6 +106,7 @@ async function connectSession(clientId, session) {
 
       if (connection === 'open') {
         session.status = 'connected';
+        session.reconnectAttempts = 0;
         session.qrDataUrl = null;
         console.log(`[${clientId}] Conexión con WhatsApp establecida.`);
       }
@@ -119,7 +126,7 @@ async function connectSession(clientId, session) {
         if (wasLoggedOut) {
           console.error(`[${clientId}] La sesión cerró sesión. Elimina las credenciales y vuelve a crearla.`);
         } else {
-          scheduleReconnect(clientId, session, statusCode === 515 ? 0 : reconnectDelayMs);
+          scheduleReconnect(clientId, session);
         }
       }
     });
@@ -150,6 +157,7 @@ export async function createSession(clientId) {
     status: 'connecting',
     qrDataUrl: null,
     qrGeneration: 0,
+    reconnectAttempts: 0,
     reconnectTimer: undefined,
     startPromise: undefined,
   };
